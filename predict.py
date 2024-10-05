@@ -1,17 +1,37 @@
-def	predict(mileage, theta0, theta1):
-	return theta0 + theta1 * mileage
+import os.path
+import numpy as np
+
+def	predict(mileage, theta0, theta1, norm_mean, norm_std):
+	norm_mil = (mileage - norm_mean) / norm_std
+	return theta0 + theta1 * norm_mil
 
 
 def main():
-	theta0 = 0
-	theta1 = 0
-	mileage = input("Enter mileage: ")
-	try:
-		mileage = float(mileage)
-		predict = predict(mileage, theta0, theta1)
-		print(f"Price estimated: {predict:.2f}")
-	except ValueError:
-		print("Incorrect input")
+	while True:
+		mileage = input("Enter mileage: ")
+
+		try:
+			mileage = float(mileage)
+		except ValueError:
+			print("Incorrect input")
+			exit(1)
+
+		file = 'trained_params.txt'
+
+		if os.path.isfile(file) == False:
+			theta0 = 0
+			theta1 = 0
+			norm_mean = 0
+			norm_std = 0
+		else:
+			try:
+				theta0, theta1, norm_mean, norm_std = np.loadtxt('trained_params.txt')
+			except Exception as e:
+				print("Error extracting datas")
+				exit(1)
+
+		prediction = predict(mileage, theta0, theta1, norm_mean, norm_std)
+		print(f"Price estimated: {prediction:.2f}")
 
 if __name__ == "__main__":
     main()

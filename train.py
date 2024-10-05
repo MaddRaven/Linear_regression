@@ -34,8 +34,7 @@ def	main():
 
 	theta0, theta1 = train_model(x, y, x_mean, x_std)
 
-	with open('trained_params.txt', 'w') as f:
-		f.write(f"{theta0}\n{theta1}")
+	np.savetxt('trained_params.txt', [theta0, theta1, x_mean, x_std], fmt='%f')
 
 	m = len(x)
 	theta = [theta0, theta1]
