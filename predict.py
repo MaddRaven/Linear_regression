@@ -1,5 +1,5 @@
 def	predict(mileage, theta0, theta1):
-	return theta0 + (theta1 * mileage)
+	return theta0 + theta1 * mileage
 
 
 def main():
