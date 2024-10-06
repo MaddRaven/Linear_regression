@@ -34,11 +34,12 @@ def	main():
 
 	theta0, theta1 = train_model(x, y, x_mean, x_std)
 
-	np.savetxt('trained_params.txt', [theta0, theta1, x_mean, x_std], fmt='%f')
+	np.savetxt('trained_params.txt', [[theta0], [theta1], x_mean, x_std])
 
 	m = len(x)
 	theta = [theta0, theta1]
 	print_graph(x, y, m, x_mean, x_std, theta)
+
 
 if __name__ == "__main__":
     main()

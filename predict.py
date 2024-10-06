@@ -22,7 +22,7 @@ def main():
 			theta0 = 0
 			theta1 = 0
 			norm_mean = 0
-			norm_std = 0
+			norm_std = 1
 		else:
 			try:
 				theta0, theta1, norm_mean, norm_std = np.loadtxt('trained_params.txt')
@@ -31,7 +31,12 @@ def main():
 				exit(1)
 
 		prediction = predict(mileage, theta0, theta1, norm_mean, norm_std)
-		print(f"Price estimated: {prediction:.2f}")
+		if prediction < 0:
+			print("Mileage too high")
+		elif mileage < 0:
+			print("Mileage should be positive")
+		else:
+			print(f"Price estimated: {prediction:.2f}")
 
 if __name__ == "__main__":
     main()
