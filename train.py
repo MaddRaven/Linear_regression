@@ -1,5 +1,5 @@
 import numpy as np
-from print import print_graph
+from visualisation import print_graph
 from predict import predict
 
 def train_model(x, y, x_mean, x_std):
@@ -12,11 +12,11 @@ def train_model(x, y, x_mean, x_std):
 	for _ in range(iterations):
 		estimation = theta0 + theta1 * ((x - x_mean) / x_std)
 
-		grad_theta0 = (np.sum(estimation - y) * learning_rate) / m
-		grad_theta1 = (np.sum((estimation - y) * ((x - x_mean) / x_std)) * learning_rate) / m
+		grad_theta0 = np.sum(estimation - y) / m
+		grad_theta1 = np.sum((estimation - y) * ((x - x_mean) / x_std)) / m
 
-		theta0 -= grad_theta0
-		theta1 -= grad_theta1
+		theta0 -= learning_rate * grad_theta0
+		theta1 -= learning_rate * grad_theta1
 
 	return theta0, theta1
 
@@ -60,19 +60,18 @@ def	main():
 	np.savetxt('trained_params.txt', [[theta0], [theta1], x_mean, x_std])
 
 	y = data[:, 1]
-	y_pred = []
-	for _ in range(len(x)):
-		y_pred.append(predict(x[_], theta0, theta1, x_mean, x_std)[0])
+	y_pred = np.array([predict(x_i, theta0, theta1, x_mean, x_std)[0] for x_i in x])
 
-	mae = calculate_mae(np.sum(y), np.sum(y_pred))
-	rmse = calculate_rmse(np.sum(y), np.sum(y_pred))
-	r2 = r2_score(np.sum(y), np.sum(y_pred))
-	mse = calculate_mse(np.sum(y), np.sum(y_pred))
+	mae = calculate_mae(y, y_pred)
+	rmse = calculate_rmse(y, y_pred)
+	r2 = r2_score(y, y_pred)
+	mse = calculate_mse(y, y_pred)
 
-	print(f"MAE: {mae}")
-	print(f"RMSE: {rmse}")
-	print(f"R-Squared: {r2}")
-	print(f"MSE: {mse}")
+	print(f"MAE      : {mae:.2f} €")
+	print(f"RMSE     : {rmse:.2f} €")
+	print(f"R² Score : {r2:.3%}")
+	print(f"MSE      : {mse:,.2f} €²")
+
 
 	m = len(x)
 	theta = [theta0, theta1]
